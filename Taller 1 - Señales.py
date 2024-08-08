@@ -54,16 +54,22 @@ def phasor_calculations(vs, vr, vzl, res_val):
     angle_VS_VR = get_angle(dot_product_VR_VS,magnitude_VS, magnitude_VR)
     #print(str(angle_VS_VR) + " degrees") 
 
-    plt.quiver(0, 0, vrx1, vry1, angles='xy', scale_units='xy', scale=1, color='purple', label='Vector VR')
+    plt.quiver(0, 0, vrx1, vry1, angles='xy', scale_units='xy', scale=1, color='purple', label=f'Vector VR = {magnitude_VR}')
 
 
     draw_angle_VS_VR = np.linspace(0, degrees_to_radians(angle_VS_VR), 100)
     x_arc_VS_VR = np.cos(draw_angle_VS_VR) * magnitude_VS / 4
     y_arc_VS_VR = np.sin(draw_angle_VS_VR) * magnitude_VS / 4
-    plt.plot(x_arc_VS_VR, y_arc_VS_VR, 'g', label=f'Angulo VS_VR  {angle_VS_VR}°')
+    plt.plot(x_arc_VS_VR, y_arc_VS_VR, 'g', label=f'Angulo VS_VR = {angle_VS_VR}°')
 
-    # Vector VZL 
-    plt.quiver(vrx1, vry1, vs - vrx1, 0 - vry1, angles='xy', scale_units='xy', scale=1, color='green', label='Vector VZL')
+    # Vector VZL
+    vector_VZL = np.array([vs - vrx1, 0 - vry1])
+    magnitude_VZL = get_magnitude(vector_VZL)
+    #print("Vector VZL")
+    #print(magnitude_VZL)
+    plt.quiver(vrx1, vry1, vs - vrx1, 0 - vry1, angles='xy', scale_units='xy', scale=1, color='green', label=f'Vector VZL = {magnitude_VZL}')
+    
+
     
     slope = get_slope((0,vry1),(vs,vrx1))
     y_intercept = get_y_intercept_of_line(slope, (vrx1,vry1))
@@ -86,13 +92,13 @@ def phasor_calculations(vs, vr, vzl, res_val):
 
     #Vectores de corriente
     #ICZL
-    plt.quiver(0, 0, intercept_in_lines[0], intercept_in_lines[1], angles='xy', scale_units='xy', scale=1, color='brown', label='Vector ICZL')
 
     vector_ICZL = np.array([intercept_in_lines[0], intercept_in_lines[1]])
 
     dot_product_VS_ICZL = get_dot_product(vector_VS, vector_ICZL)
     magnitude_ICZL = get_magnitude(vector_ICZL)
     angle_VS_ICZL = get_angle(dot_product_VS_ICZL, magnitude_VS, magnitude_ICZL)
+    plt.quiver(0, 0, intercept_in_lines[0], intercept_in_lines[1], angles='xy', scale_units='xy', scale=1, color='brown', label=f'Vector ICZL = {magnitude_ICZL}')
     #print(str(angle_VS_ICZL) + " degrees")
 
     draw_angle_VS_ICZL = np.linspace(0, degrees_to_radians(angle_VS_ICZL), 100)
@@ -101,11 +107,24 @@ def phasor_calculations(vs, vr, vzl, res_val):
     y_arc_VS_ICZL = np.sin(draw_angle_VS_ICZL) * arc_radius
     plt.plot(x_arc_VS_ICZL, y_arc_VS_ICZL, 'r', label=f'Angulo VS_ICZL  {angle_VS_ICZL}°')
 
+    #y = 0,3039
+    x_line = np.linspace(-10, 10, 400)  
 
+    vector_y_line = np.array([0, intercept_in_lines[1]])
+    y_line = np.full_like(x_line,  intercept_in_lines[1])
+    plt.plot(x_line, y_line, label=f'y = {intercept_in_lines[1]}',color='cyan', linestyle='--')
+
+    angulo_radianes = np.arctan2(vector_VZL[1], vector_VZL[0]) - np.arctan2(vector_y_line[1], vector_y_line[0])
+
+    # Convertir el ángulo a grados y hacerlo negativo
+    angulo_grados = np.degrees(angulo_radianes)
+    
 
     #IRZL
-    plt.quiver(intercept_in_lines[0], intercept_in_lines[1],vrx1 - intercept_in_lines[0],vry1 - intercept_in_lines[1] ,angles='xy', scale_units='xy', scale=1, color='magenta', label='Vector ICZL')
-
+    
+    vector_IRZL = np.array([vrx1 - intercept_in_lines[0], vry1 - intercept_in_lines[1]])
+    magnitude_IRZL = get_magnitude(vector_IRZL)
+    plt.quiver(intercept_in_lines[0], intercept_in_lines[1],vrx1 - intercept_in_lines[0],vry1 - intercept_in_lines[1] ,angles='xy', scale_units='xy', scale=1, color='magenta', label=f'Vector IRZL = {magnitude_IRZL}')
 
     plt.title('Phasors')
     plt.xlabel('x')
