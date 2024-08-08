@@ -35,8 +35,7 @@ def phasor_calculations(vs, vr, vzl, res_val):
     first_intercept, second_intercept = get_intersections_in_circumferences(0,0,vr,vs,0,vzl)
     plt.scatter(first_intercept, second_intercept, color='black', zorder=5, label='Intersecciones')
 
-    #vector VS de (1,0)
-    plt.quiver(0, 0, vs, 0, angles='xy', scale_units='xy', scale=1, color='red', label='Vector VS')
+   
 
     # vector VR
     # orden correcto de intersecciones
@@ -55,6 +54,9 @@ def phasor_calculations(vs, vr, vzl, res_val):
     #print(str(angle_VS_VR) + " degrees") 
 
     plt.quiver(0, 0, vrx1, vry1, angles='xy', scale_units='xy', scale=1, color='purple', label=f'Vector VR = {magnitude_VR}')
+
+    #vector VS de (1,0)
+    plt.quiver(0, 0, vs, 0, angles='xy', scale_units='xy', scale=1, color='red', label=f'Vector VS = {magnitude_VS}')
 
 
     draw_angle_VS_VR = np.linspace(0, degrees_to_radians(angle_VS_VR), 100)
